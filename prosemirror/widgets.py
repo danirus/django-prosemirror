@@ -65,8 +65,9 @@ class ProseMirrorWidget(widgets.Textarea):
         """
         Include media
         """
+        jsfile = 'bundle.js' if settings.DEBUG else 'widget.min.js'
         js = (
-            staticfiles_storage.url("prosemirror/widget.min.js"),
+            staticfiles_storage.url("prosemirror/%s" % jsfile),
         )
 
         css = {

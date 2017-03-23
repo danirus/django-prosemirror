@@ -6,7 +6,7 @@ SHELL = /bin/bash
 
 NODE_MODULES ?= node_modules
 NPM_BIN = $(shell npm bin)
-DEBUG = 0
+DEBUG = 1
 BUILD_DIR ?= .build
 BUILD_CACHE_DIR ?= .build-cache
 SOURCE_DIR ?= ./
@@ -50,13 +50,12 @@ scss:
 			prosemirror/static/prosemirror/widget.min.css; \
 	fi
 
-# Browserify
+
 browserify:
 	@if [[ $(DEBUG) == 1 ]]; then \
-		$(NPM_BIN)/browserify -d \
-			prosemirror/static/prosemirror/widget.js | \
-			$(NPM_BIN)/exorcist prosemirror/static/prosemirror/widget.min.js.map > \
-			prosemirror/static/prosemirror/widget.min.js; \
+		$(NPM_BIN)/browserify \
+			-d prosemirror/static/prosemirror/widget.js \
+			-o prosemirror/static/prosemirror/bundle.js; \
 	else \
 		$(NPM_BIN)/browserify -g uglifyify \
 			prosemirror/static/prosemirror/widget.js | \
