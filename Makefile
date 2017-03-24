@@ -4,64 +4,44 @@
 
 SHELL = /bin/bash
 
-NODE_MODULES ?= node_modules
-NPM_BIN = $(shell npm bin)
-DEBUG = 1
-BUILD_DIR ?= .build
-BUILD_CACHE_DIR ?= .build-cache
-SOURCE_DIR ?= ./
+npmbin = $(shell npm bin)
+cachedir ?= .build-cache
+staticdir = prosemirror/static/prosemirror
 
-# Default
 all: build
 
-# Release
-build: clean scss browserify package
+# Build production release.
+build: clean scss browserify
 
-# Development build
-set_dev:
-	@echo -e "\nActivating development modus\n"
-	$(eval DEBUG = 1)
+# Build development release.
+dev: clean scss-dev browserify-dev
 
 # Clean
 clean:
-	@rm -rf prosemirror/static/prosemirror/*.min.*
+	-rm -rf prosemirror/static/prosemirror/bundle.*
+	-rm -rf prosemirror/static/prosemirror/*.min.*
 
-# Scss
+
+scss-dev:
+	test -d "$(cachedir)" || @mkdir "$(cachedir)"
+	$(npmbin)/node-sass $(staticdir)/widget.scss $(cachedir)/widget.css \
+	  --output-style nested --source-map $(cachedir)/widget.css.map
+	cat $(cachedir)/widget.css | $(npmbin)/postcss --map --use autoprefixer > \
+	  $(staticdir)/widget.min.css
+
 scss:
-	@mkdir -p $(BUILD_CACHE_DIR)
-	@if [[ $(DEBUG) == 1 ]]; then \
-		$(NPM_BIN)/node-sass \
-			prosemirror/static/prosemirror/widget.scss \
-			$(BUILD_CACHE_DIR)/widget.css \
-			--output-style nested \
-			--source-map $(BUILD_CACHE_DIR)/widget.css.map; \
-		cat $(BUILD_CACHE_DIR)/widget.css | \
-			$(NPM_BIN)/postcss \
-			--map \
-			--use autoprefixer > \
-			prosemirror/static/prosemirror/widget.min.css; \
-	else \
-		$(NPM_BIN)/node-sass \
-			prosemirror/static/prosemirror/widget.scss \
-			$(BUILD_CACHE_DIR)/widget.css \
-			--output-style compressed; \
-		cat $(BUILD_CACHE_DIR)/widget.css | \
-			$(NPM_BIN)/postcss --use autoprefixer > \
-			prosemirror/static/prosemirror/widget.min.css; \
-	fi
+	test -d "$(cachedir)" || @mkdir "$(cachedir)"
+	$(npmbin)/node-sass $(staticdir)/widget.scss $(cachedir)/widget.css \
+	  --output-style compressed;
+	cat $(cachedir)/widget.css | $(npmbin)/postcss --use autoprefixer > \
+	  $(staticdir)/widget.min.css
 
+browserify-dev:
+	$(npmbin)/browserify -d $(staticdir)/widget.js -o $(staticdir)/bundle.js
 
 browserify:
-	@if [[ $(DEBUG) == 1 ]]; then \
-		$(NPM_BIN)/browserify \
-			-d prosemirror/static/prosemirror/widget.js \
-			-o prosemirror/static/prosemirror/bundle.js; \
-	else \
-		$(NPM_BIN)/browserify -g uglifyify \
-			prosemirror/static/prosemirror/widget.js | \
-			$(NPM_BIN)/uglifyjs -cm > \
-			prosemirror/static/prosemirror/widget.min.js; \
-	fi
+	$(npmbin)/browserify -g uglifyify $(staticdir)/widget.js | \
+	  $(npmbin)/uglifyjs -cm > $(staticdir)/widget.min.js
 
 # Build wheel
 package:
