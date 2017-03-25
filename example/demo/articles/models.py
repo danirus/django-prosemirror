@@ -8,4 +8,3 @@ class Article(models.Model):
     slug = models.SlugField()
     abstract = models.TextField()
     body = ProseMirrorField(prosemirror_profile="maxi")
-

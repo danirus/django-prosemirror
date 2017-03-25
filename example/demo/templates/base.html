@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>django-prosemirror example</title>
+    <style>
+      BODY {
+        font: 16px arial, sans-serif;
+        color: #444;
+      }
+      H1.header { margin: 1.5em 0;
+                  text-align: center }
+      HR { border: 0;
+           border-bottom: 1px solid #ccc }
+      .abstract { margin: 1.3em 0;
+                  padding: 0px 60px;
+                  font-style: italic }
+      .article { margin: 2em 0;
+                 font-size: 1.1em }
+    </style>
+  </head>
+  <body>
+    <h1 class="header">Example of django-prosemirror</h1>
+    <div style="width:768px; margin:10px auto">
+      {% block body %}
+      {% endblock %}
+    </div>
+  </body>
+</html>

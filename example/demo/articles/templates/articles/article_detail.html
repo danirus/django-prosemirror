@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load prosemirror %}
+
+{% block head_title %}{{ object.title }}{% endblock %}
+
+{% block body %}
+<hr/>
+<h2 style="text-align:center">{{ object.title }}</h2>
+<div class="abstract">{{ object.abstract }}</div>
+<div class="article">{% prosemirror object.body %}</div>
+{% endblock %}
