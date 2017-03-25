@@ -1,23 +1,28 @@
-# Exclude python compiles
+# Exclude python compiles.
 *.pyc
 
-# Exclude virtual environment
+# Exclude virtual environment.
 /venv/
 
-# Exclude ruby bundle
+# Exclude ruby bundle.
 /.bundle/
 
-# Exclude node environment
+# Exclude node environment.
 /node_modules/
 
-# Exclude generated files
+# Exclude generated files.
 /prosemirror/static/prosemirror/widget.min.css
 /prosemirror/static/prosemirror/widget.min.js
 /prosemirror/static/prosemirror/widget.min.js.map
+/prosemirror/static/prosemirror/bundle.js
 /django_prosemirror.egg*/
 /dist/
 /build/
 /.build-cache/
 
-# Exclude the sass cache
+# Exclude the sass cache.
 /.sass-cache/
+
+# Exclude other files.
+db.sqlite3
+.emacs.desktop*
